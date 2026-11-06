@@ -1,0 +1,7 @@
+/* Global styles for the skin, loaded only in the preview. */
+
+/* Cinema Noir type: "Playfair Display" for the film-title moments (player
+   title, time readout, FIN. card, dialog headings). UI micro-labels use the
+   system sans, letterspaced and uppercase. The serif stack falls back to
+   Didot/Georgia so the layout holds if the webfont fails. */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap");
