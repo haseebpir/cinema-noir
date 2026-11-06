@@ -2248,10 +2248,60 @@
       padding-bottom: calc(var(--media-spacing) * 2.5);
     }
 
-    /* ---- Bottom deck: one solid strip, one hairline ----------------------- */
+    /* ---- Bottom deck: one low, slim strip, floating centred ------------------
+       The cluster (seek line + button row) no longer spans the player. It
+       floats as a single hairline box — about 42% of the player width on
+       desktop, nearly full width on small players — and it is as low as the
+       44px touch targets allow: the row is exactly the buttons, with the
+       padding, the slider-to-row gap and the seek line's box squeezed
+       around them. Hairlines on all four sides now that it floats; the
+       corners stay square. */
 
     .video-controls-bottom {
-      border-top: 1px solid var(--cn-line);
+      border: 1px solid var(--cn-line);
+      /* The button row band lands at 52px: 44px targets + 4px above/below. */
+      padding: calc(var(--media-spacing) * 1) calc(var(--media-spacing) * 3);
+      gap: calc(var(--media-spacing) * 0.5);
+      /* Chrome settles in and out on a calm 250ms fade — opacity only, so
+         nothing ever jumps. */
+      transition: opacity 0.25s ease;
+    }
+
+    .video-controls-top {
+      transition: opacity 0.25s ease;
+    }
+
+    /* Calmer chrome: larger glyphs and more generous spacing between the
+       controls (Apple-style restraint), hit areas unchanged at 44px. */
+    .video-controls-bottom .media-button-icon,
+    .video-controls-top .media-button-icon {
+      width: calc(var(--media-spacing) * 6);
+      height: calc(var(--media-spacing) * 6);
+    }
+
+    .video-controls-row,
+    .video-controls-group {
+      gap: calc(var(--media-spacing) * 2.5);
+    }
+
+    /* Small players: the strip floats just inside the frame at nearly full
+       width — usability first. */
+    @container media-root (width < 40rem) {
+      .video-controls-bottom {
+        inset-inline: calc(var(--media-spacing) * 2);
+        bottom: calc(var(--media-spacing) * 2);
+      }
+    }
+
+    /* Desktop: the strip shrinks to ~42% of the player, centred. */
+    @container media-root (width >= 40rem) {
+      .video-controls-bottom {
+        inset-inline: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 42%;
+        bottom: calc(var(--media-spacing) * 3);
+      }
     }
 
     /* The deck (and top bar) stay visible while keyboard focus is inside the
@@ -2271,8 +2321,12 @@
 
     /* ---- Timeline: a 2px ivory line --------------------------------------- */
 
+    /* The visible line is 2px; its box is a quiet 20px hit area (the
+       research's ~24px, trimmed slightly to hold the slim profile). The
+       square thumb keeps its seat on the line but only appears on hover,
+       focus or contact — at rest the line speaks alone. */
     .media-time-slider {
-      height: calc(var(--media-spacing) * 6);
+      height: calc(var(--media-spacing) * 5);
     }
 
     .media-time-slider-track {
@@ -2291,12 +2345,21 @@
     .media-time-slider-thumb {
       width: calc(var(--media-spacing) * 3);
       height: calc(var(--media-spacing) * 3);
+      opacity: 0;
       transition:
+        opacity 0.15s ease,
         width 0.15s ease,
         height 0.15s ease;
     }
 
     @scope (.media-time-slider) {
+      &:hover .media-time-slider-thumb,
+      &:focus-within .media-time-slider-thumb,
+      &[data-pointing] .media-time-slider-thumb,
+      &[data-dragging] .media-time-slider-thumb {
+        opacity: 1;
+      }
+
       &[data-pointing] .media-time-slider-thumb,
       &[data-dragging] .media-time-slider-thumb {
         width: calc(var(--media-spacing) * 3.5);
